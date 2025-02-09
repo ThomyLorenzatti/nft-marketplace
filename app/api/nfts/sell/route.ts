@@ -13,7 +13,7 @@ export async function POST(request: Request) {
         ...nftData,
         createdAt: new Date().toISOString()
       }
-    });
+    }, { status: 200 });
   } catch (error) {
     return NextResponse.json(
       { success: false, message: "Erreur lors de la mise en vente" },
