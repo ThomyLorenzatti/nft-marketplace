@@ -9,21 +9,7 @@ export function Navbar() {
   const [isConnected, setIsConnected] = useState(false)
 
   const toggleWallet = async () => {
-    try {
-      const response = await fetch('/api/connect-wallet', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          debug: 'fake',
-        })
-      },)
-      const data = await response.json()
-      setIsConnected(data.connected)
-    } catch (error) {
-      console.error('Erreur lors de la connexion du wallet:', error)
-    }
+    setIsConnected(!isConnected)
   }
 
   return (
