@@ -12,7 +12,13 @@ export function Navbar() {
     try {
       const response = await fetch('/api/connect-wallet', {
         method: 'POST',
-      })
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          debug: 'fake',
+        })
+      },)
       const data = await response.json()
       setIsConnected(data.connected)
     } catch (error) {
