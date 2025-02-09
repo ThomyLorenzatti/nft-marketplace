@@ -161,7 +161,7 @@ export function NFTCard({
                 <div className="flex justify-between items-center">
                   <div className="flex items-center gap-2">
                     <Shield className="h-5 w-5 text-accent" />
-                    <span className="text-sm text-muted-foreground">Vérifié sur XRPereum</span>
+                    <span className="text-sm text-muted-foreground">Vérifié sur XRP</span>
                   </div>
                   <div className="font-bold text-accent flex items-center gap-1">
                     <Sparkles className="h-4 w-4" />
