@@ -12,7 +12,7 @@ export const MOCK_NFTS = [
     attributes: [
       { trait: "Rareté", value: "Légendaire" },
       { trait: "Édition", value: "1 of 1" },
-      { trait: "Blockchain", value: "Ethereum" }
+      { trait: "Blockchain", value: "XRPereum" }
     ]
   },
   {
@@ -27,7 +27,7 @@ export const MOCK_NFTS = [
     attributes: [
       { trait: "Rareté", value: "Rare" },
       { trait: "Édition", value: "1 of 10" },
-      { trait: "Blockchain", value: "Ethereum" }
+      { trait: "Blockchain", value: "XRPereum" }
     ]
   },
   {
@@ -42,7 +42,7 @@ export const MOCK_NFTS = [
     attributes: [
       { trait: "Rareté", value: "Commun" },
       { trait: "Édition", value: "1 of 100" },
-      { trait: "Blockchain", value: "Ethereum" }
+      { trait: "Blockchain", value: "XRPereum" }
     ]
   },
   {
@@ -57,7 +57,7 @@ export const MOCK_NFTS = [
     attributes: [
       { trait: "Rareté", value: "Épique" },
       { trait: "Édition", value: "1 of 25" },
-      { trait: "Blockchain", value: "Ethereum" }
+      { trait: "Blockchain", value: "XRPereum" }
     ]
   },
   {
@@ -72,7 +72,7 @@ export const MOCK_NFTS = [
     attributes: [
       { trait: "Rareté", value: "Rare" },
       { trait: "Édition", value: "1 of 50" },
-      { trait: "Blockchain", value: "Ethereum" }
+      { trait: "Blockchain", value: "XRPereum" }
     ]
   },
   {
@@ -87,7 +87,7 @@ export const MOCK_NFTS = [
     attributes: [
       { trait: "Rareté", value: "Mythique" },
       { trait: "Édition", value: "1 of 5" },
-      { trait: "Blockchain", value: "Ethereum" }
+      { trait: "Blockchain", value: "XRPereum" }
     ]
   },
   {
@@ -102,7 +102,7 @@ export const MOCK_NFTS = [
     attributes: [
       { trait: "Rareté", value: "Épique" },
       { trait: "Édition", value: "1 of 15" },
-      { trait: "Blockchain", value: "Ethereum" }
+      { trait: "Blockchain", value: "XRPereum" }
     ]
   },
   {
@@ -117,7 +117,7 @@ export const MOCK_NFTS = [
     attributes: [
       { trait: "Rareté", value: "Légendaire" },
       { trait: "Édition", value: "1 of 3" },
-      { trait: "Blockchain", value: "Ethereum" }
+      { trait: "Blockchain", value: "XRPereum" }
     ]
   }
 ];
@@ -136,7 +136,7 @@ export const USER_COLLECTION = [
     attributes: [
       { trait: "Rareté", value: "Épique" },
       { trait: "Édition", value: "1 of 20" },
-      { trait: "Blockchain", value: "Ethereum" }
+      { trait: "Blockchain", value: "XRPereum" }
     ]
   },
   {
@@ -151,7 +151,7 @@ export const USER_COLLECTION = [
     attributes: [
       { trait: "Rareté", value: "Légendaire" },
       { trait: "Édition", value: "1 of 7" },
-      { trait: "Blockchain", value: "Ethereum" }
+      { trait: "Blockchain", value: "XRPereum" }
     ]
   },
   {
@@ -166,7 +166,7 @@ export const USER_COLLECTION = [
     attributes: [
       { trait: "Rareté", value: "Mythique" },
       { trait: "Édition", value: "1 of 2" },
-      { trait: "Blockchain", value: "Ethereum" }
+      { trait: "Blockchain", value: "XRPereum" }
     ]
   }
 ];

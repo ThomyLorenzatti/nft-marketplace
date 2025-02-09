@@ -71,7 +71,7 @@ export default function SellPage() {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="price" className="text-lg text-primary">Prix (ETH)</Label>
+                <Label htmlFor="price" className="text-lg text-primary">Prix (XRP)</Label>
                 <Input
                   id="price"
                   type="number"

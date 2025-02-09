@@ -91,7 +91,7 @@ export function NFTCard({
         <CardFooter className="p-4 pt-0 flex justify-between items-center">
           <div className="font-bold text-accent flex items-center gap-1">
             <Sparkles className="h-4 w-4" />
-            {price} ETH
+            {price} XRP
           </div>
           {!isInUserCollection && (
             <Button 
@@ -161,11 +161,11 @@ export function NFTCard({
                 <div className="flex justify-between items-center">
                   <div className="flex items-center gap-2">
                     <Shield className="h-5 w-5 text-accent" />
-                    <span className="text-sm text-muted-foreground">Vérifié sur Ethereum</span>
+                    <span className="text-sm text-muted-foreground">Vérifié sur XRPereum</span>
                   </div>
                   <div className="font-bold text-accent flex items-center gap-1">
                     <Sparkles className="h-4 w-4" />
-                    {price} ETH
+                    {price} XRP
                   </div>
                 </div>
                 

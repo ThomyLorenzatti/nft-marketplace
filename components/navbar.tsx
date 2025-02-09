@@ -9,6 +9,7 @@ export function Navbar() {
   const [isConnected, setIsConnected] = useState(false)
 
   const toggleWallet = async () => {
+    // TODO: Implement wallet connection
     setIsConnected(!isConnected)
   }
 
