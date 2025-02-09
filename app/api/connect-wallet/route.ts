@@ -3,18 +3,23 @@ import { NextResponse } from 'next/server';
 export async function POST() {
   // Simuler une connexion réussie
   try {
-    return NextResponse.json({ connected: true }, { status: 200 });
+    return NextResponse.json({
+      connected: true,
+      message: 'Connexion réussie',
+    }, { status: 200 });
   } catch (error) {
-    return NextResponse.json(
-      { error: 'Erreur interne du serveur' },
-      { status: 500 }
-    );
+    return NextResponse.json({
+      connected: false,
+      error: 'Erreur interne du serveur',
+      details: error instanceof Error ? error.message : 'Erreur inconnue'
+    }, { status: 500 });
   }
 }
 
 export async function GET() {
-  return NextResponse.json(
-    { error: 'Méthode non autorisée' },
-    { status: 405 }
-  );
+  return NextResponse.json({
+    connected: false,
+    error: 'Méthode non autorisée',
+    message: 'Veuillez utiliser une requête POST pour la connexion'
+  }, { status: 405 });
 }
