@@ -91,3 +91,36 @@
 [data-state="open"][role="dialog"] > * {
   animation: dialogSlideIn 0.3s ease-out;
 }
+
+
+.can-effect {
+  background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(4px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.can-shine {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(211, 228, 179, 0.1) 45%,
+    rgba(255,255,255,0.1) 55%,
+    transparent
+  );
+  transform: translateX(-100%);
+  animation: shine 3s infinite;
+  z-index: 1;
+}
+
+@keyframes shine {
+  0% { transform: translateX(-100%); }
+  50% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}

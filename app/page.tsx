@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { SearchBar } from "@/components/ui/search"
-import { NFTCard } from "@/components/nft-card"
+import { NFTCard } from "@/components/nft-card/nft-card"
 
 interface NFT {
   id: string
@@ -25,6 +25,7 @@ export default function Home() {
     const fetchNFTs = async () => {
       try {
         const response = await fetch('/api/nfts')
+        
         const data = await response.json()
         setNfts(data.nfts)
       } catch (error) {

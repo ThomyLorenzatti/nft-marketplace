@@ -28,8 +28,8 @@ export default function SellPage() {
           <h1 className="text-4xl font-bold mb-8 neon-text bg-clip-text text-transparent bg-gradient-to-r from-primary via-secondary to-accent">
             Vendre un NFT
           </h1>
-          
           <div className="glass-effect p-8 space-y-6">
+            
             <div className="space-y-2">
               <Label htmlFor="image" className="text-lg text-primary">Image du NFT</Label>
               <div className="relative aspect-square rounded-xl overflow-hidden neon-border">
