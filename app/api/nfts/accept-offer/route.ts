@@ -59,11 +59,9 @@ export async function POST(request: Request) {
     const preparedTx = await nftService.prepareAcceptOfferTransaction(
       account,
       xrpTxId,
-      transaction.amount
     )
 
     console.log('preparedTx', preparedTx)
-    console.log('lfm;,f,sklfmg,ggg,g,g,g,g,g,g,g,g,g,g,g,,,dmlkg,sdfgnsdkmjfgnjklsdfnggggfgfgfgfgfgfgfgfgfgfgfgfgfgfgfgfgfgfgfgfgfgf')
     // Créer un payload XUMM pour la signature
     const payload = await nftService.xumm.payload.create({
       txjson: preparedTx
@@ -96,24 +94,31 @@ export async function POST(request: Request) {
             (tx: any) => tx.transactionId !== txId
           )
           const txInfo = await nftService.getTransactionDetails(txHash)
-          const { error: updateError } = await supabase
-          .from('users')
-          .update({
-            pendingtransactions: updatedTransactions,
-            last_connected: new Date().toISOString()
-          })
-          .eq('xrp_address', account)
     
-        if (updateError) {
-          return NextResponse.json(
-            { 
-              success: false,
-              error: "Failed to update transactions",
-              details: updateError.message 
-            },
-            { status: 500 }
-          )
-        }
+          // Mettre à jour le propriétaire du NFT
+          const { error: nftUpdateError } = await supabase
+            .from('nfts')
+            .update({ 
+              owner_address: account,
+              last_transaction_hash: txHash,
+              is_listed: false, // Le NFT n'est plus en vente
+              sell_offer_index: null // Réinitialiser l'offre de vente
+            })
+            .eq('token_id', transaction.nftId)
+    
+          if (nftUpdateError) {
+            console.error('Error updating NFT owner:', nftUpdateError)
+          }
+    
+          // Mettre à jour les transactions en attente
+          const { error: updateError } = await supabase
+            .from('users')
+            .update({
+              pendingtransactions: updatedTransactions,
+              last_connected: new Date().toISOString()
+            })
+            .eq('xrp_address', account)
+    
           if (updateError) {
             console.error('Error updating transaction status:', updateError)
           }

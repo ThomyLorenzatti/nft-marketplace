@@ -81,9 +81,12 @@ export function NFTCard({
   const [selling, setSelling] = useState(false);
   const [salePrice, setSalePrice] = useState(price);
 
+  //BURN
   const [burning, setBurning] = useState(false);
   const [burnQrCode, setBurnQrCode] = useState<string | null>(null);
 
+  // 
+  const [sellQrCode, setSellQrCode] = useState<string | null>(null);
   const [xrplInfo, setXrplInfo] = useState<NFTXRPLInfo | null>(null);
   const [isLoadingXrplInfo, setIsLoadingXrplInfo] = useState(false);
   const [showXrplInfoModal, setShowXrplInfoModal] = useState(false);
@@ -96,6 +99,7 @@ export function NFTCard({
   const [isValidAddress, setIsValidAddress] = useState(false);
   const [isCheckingAddress, setIsCheckingAddress] = useState(false);
   const [sendPrice, setSendPrice] = useState('0');
+  const [showSendForm, setShowSendForm] = useState(false);
 
   const handleSell = async () => {
     setSelling(true);
@@ -108,17 +112,17 @@ export function NFTCard({
         body: JSON.stringify({ 
           nftId: id,
           price: salePrice,
-          sellerAddress: creator // Assuming creator is the current owner
+          sellerAddress: owner
         }),
       });
       
       const data = await response.json();
       
       if (data.success) {
-        toast.success("NFT mis en vente avec succès!", {
-          description: "Votre NFT est maintenant disponible sur le marketplace",
+        setSellQrCode(data.qrCodeUrl);
+        toast.success("Scannez le QR code pour confirmer la mise en vente", {
+          description: "Utilisez l'application XUMM pour scanner",
         });
-        setShowDialog(false);
       } else {
         toast.error("Erreur lors de la mise en vente", {
           description: data.message,
@@ -225,7 +229,7 @@ export function NFTCard({
         },
         body: JSON.stringify({ 
           nftId: id,
-          senderAddress: creator,
+          senderAddress: owner,
           recipientAddress,
           price: sendPrice
         }),
@@ -492,95 +496,134 @@ export function NFTCard({
                       Annuler
                     </Button>
                   </div>
+                ) : sellQrCode ? (
+                    <div className="flex flex-col items-center space-y-4">
+                    <h3 className="text-lg font-semibold text-primary">
+                      Confirmer la mise en vente
+                    </h3>
+                    <Image
+                      src={sellQrCode}
+                      alt="QR Code pour la mise en vente"
+                      width={200}
+                      height={200}
+                      className="rounded-lg"
+                    />
+                    <p className="text-sm text-muted-foreground text-center">
+                      Scannez ce QR code avec l'application XUMM pour confirmer la mise en vente du NFT
+                    </p>
+                    <Button
+                      variant="outline"
+                      onClick={() => setSellQrCode(null)}
+                      className="mt-4"
+                    >
+                      Annuler
+                    </Button>
+                  </div>
                 ) : (
-                  <div className="space-y-4">
+                    <div className="space-y-4">
                     <div className="glass-effect p-4 rounded-xl border border-primary/30 space-y-4">
                       <div className="space-y-2">
-                        <label className="text-sm text-muted-foreground">
-                          Adresse du destinataire
-                        </label>
-                        <div className="flex gap-2 mt-1">
-                          <div className="relative flex-1">
-                            <input
-                              type="text"
-                              value={recipientAddress}
-                              onChange={(e) => {
-                                setRecipientAddress(e.target.value);
-                                validateXRPAddress(e.target.value);
-                              }}
-                              placeholder="rAddress..."
-                              className={`w-full bg-background/50 border rounded-lg px-3 py-2 text-sm ${
-                                isValidAddress 
-                                  ? "border-green-500/50" 
-                                  : "border-primary/30"
-                              }`}
-                            />
-                            {isCheckingAddress && (
-                              <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
-                              </div>
-                            )}
+                      <label className="text-sm text-muted-foreground">
+                        Envoie à un wallet
+                      </label>
+                      <div className="flex gap-2 mt-1">
+                        <div className="relative flex-1">
+                        <input
+                          type="text"
+                          value={recipientAddress}
+                          onChange={(e) => {
+                          setRecipientAddress(e.target.value);
+                          validateXRPAddress(e.target.value);
+                          }}
+                          placeholder="Adresse du destinataire..."
+                          className={`w-full bg-background/50 border rounded-lg px-3 py-2 text-sm ${
+                          isValidAddress 
+                            ? "border-green-500/50" 
+                            : "border-primary/30"
+                          }`}
+                        />
+                        {isCheckingAddress && (
+                          <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
                           </div>
+                        )}
                         </div>
                       </div>
+                      </div>
 
-                        <div className="space-y-2">
-                        <label className="text-sm text-muted-foreground">
-                          Prix en XRP (optionnel)
-                        </label>
-                        <div className="flex gap-1">
-                          <input
-                          type="number"
-                          value={sendPrice}
-                          onChange={(e) => setSendPrice(e.target.value)}
-                          placeholder="0"
-                          min="0"
-                          step="0.000001"
-                          className="w-24 bg-background/50 border border-primary/30 rounded-lg px-2 py-2 text-sm"
-                          />
-                          <Button
-                          onClick={handleSend}
-                          disabled={sending || !isValidAddress}
-                          className={`${
-                            isValidAddress 
-                            ? "bg-primary text-primary-foreground hover:bg-primary/80" 
-                            : "bg-muted text-muted-foreground"
-                          } neon-hover min-w-[100px]`}
-                          >
-                          {sending ? (
-                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current"></div>
-                          ) : (
-                            <>
-                            <Send className="mr-2 h-4 w-4" />
-                            </>
-                          )}
-                          </Button>
-                        </div>
-                        </div>
+                      <div className="space-y-2">
+                      <label className="text-sm text-muted-foreground">
+                        Prix en XRP (optionnel)
+                      </label>
+                      <div className="flex gap-1">
+                        <input
+                        type="number"
+                        value={sendPrice}
+                        onChange={(e) => setSendPrice(e.target.value)}
+                        placeholder="0"
+                        min="0"
+                        step="0.000001"
+                        className="w-24 bg-background/50 border border-primary/30 rounded-lg px-2 py-2 text-sm"
+                        />
+                        <Button
+                        onClick={handleSend}
+                        disabled={sending || !isValidAddress}
+                        className={`${
+                        isValidAddress 
+                        ? "bg-primary text-primary-foreground hover:bg-primary/80" 
+                        : "bg-muted text-muted-foreground"
+                        } neon-hover min-w-[100px]`}
+                        >
+                        {sending ? (
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current"></div>
+                        ) : (
+                        <>
+                        <Send className="mr-2 h-4 w-4" />
+                        </>
+                        )}
+                        </Button>
+                      </div>
+                      </div>
                     </div>
 
 
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="flex flex-col gap-4">
+                      <div className="glass-effect p-4 rounded-xl border border-primary/30 space-y-4">
+                      <div className="space-y-2">
+                        <label className="text-sm text-muted-foreground">
+                        Prix de vente en XRP
+                        </label>
+                        <input
+                        type="number"
+                        value={salePrice}
+                        onChange={(e) => setSalePrice(e.target.value)}
+                        placeholder="Prix en XRP"
+                        min="0"
+                        step="0.000001"
+                        className="w-full bg-background/50 border border-primary/30 rounded-lg px-3 py-2 text-sm"
+                        />
+                      </div>
                       <Button
-                        className="w-full bg-primary text-primary-foreground hover:bg-primary/80 neon-hover rounded-xl"
+                        className="w-full bg-primary text-primary-foreground hover:bg-primary/80 neon-hover rounded-xl whitespace-nowrap"
                         onClick={handleSell}
                         disabled={selling || burning || sending}
                       >
                         <Zap className="mr-2 h-4 w-4" />
                         {selling ? "Mise en vente..." : "Mettre en vente"}
                       </Button>
-                      
+                      </div>
+
                       <Button
-                        variant="destructive"
-                        className="w-full hover:bg-destructive/80 neon-hover rounded-xl"
-                        onClick={handleBurn}
-                        disabled={selling || burning || sending}
+                      variant="destructive"
+                      className="hover:bg-destructive/80 neon-hover rounded-xl"
+                      onClick={handleBurn}
+                      disabled={selling || burning || sending}
                       >
-                        <Trash2 className="mr-2 h-4 w-4" />
-                        {burning ? "Préparation..." : "Détruire"}
+                      <Trash2 className="mr-2 h-4 w-4" />
+                      {burning ? "Préparation..." : "Détruire"}
                       </Button>
                     </div>
-                  </div>
+                    </div>
                 )}
               </div>
             </div>

@@ -1,6 +1,6 @@
 import { NFTMetadata, MintNFTRequest } from '@/types/nft';
 import { XummSdk } from 'xumm-sdk';
-import { Client, convertStringToHex, SubmittableTransaction} from 'xrpl';
+import { Client, convertStringToHex, SubmittableTransaction, xrpToDrops} from 'xrpl';
 import { IPFSService } from './ipfs.service';
 import { cp } from 'node:fs';
 import { supabase } from '@/lib/supabase';
@@ -61,10 +61,8 @@ export class NFTService {
         metadata_url: this.ipfsService.getHttpUrl(metaDataURL)
       }).select().single();
 
-      // console.log('METADATA URL', metaDataURL);
-      // if (error) throw error;
-      // return { data, metaDataURL };
-      return { metaDataURL };
+      if (error) throw error;
+      return { metaDataURL, id: data.id };
     } catch (error) {
       console.error('Error creating NFT metadata:', error);
       throw error;
@@ -131,6 +129,26 @@ export class NFTService {
     }
   }
 
+  async prepareSellOffer(address: string, nftId: string, price: string) {
+    try {
+      await this.client.connect();
+      
+      const prepared = await this.client.autofill({
+        TransactionType: "NFTokenCreateOffer",
+        Account: address,
+        NFTokenID: nftId,
+        Amount: xrpToDrops(price),
+        Flags: 1, // tfSellToken
+      });
+  
+      return prepared;
+    } catch (error) {
+      console.error('Error preparing sell offer:', error);
+      throw error;
+    } finally {
+      await this.client.disconnect();
+    }
+  }
 
   async prepareSendTransaction(senderAddress: string, recipientAddress: string, tokenId: string, price: string) {
     try {
@@ -141,7 +159,7 @@ export class NFTService {
         Account: senderAddress,
         NFTokenID: tokenId,
         Destination: recipientAddress,
-        Amount: price, // Transfer gratuit
+        Amount: xrpToDrops(price), // Transfer gratuit
         Flags: 1, // Offre de vente
       });
 
@@ -155,7 +173,7 @@ export class NFTService {
     }
   }
 
-  async prepareAcceptOfferTransaction(account: string, offerId: string, amount: string) {
+  async prepareAcceptOfferTransaction(account: string, offerId: string) {
     try {
       await this.client.connect()
       

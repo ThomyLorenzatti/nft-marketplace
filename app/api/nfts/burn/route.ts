@@ -30,19 +30,32 @@ export async function POST(request: Request) {
       );
     }
 
-    // Souscrire au statut du payload
     const subscription = await nftService.xumm.payload.subscribe(payload.uuid, async (event) => {
       if (event.data.signed === true) {
-        // Mettre à jour Supabase
-        const { error } = await supabase
-          .from('nfts')
-          .update({ 
-            burned: true,
-            burned_at: new Date().toISOString()
-          })
-          .eq('token_id', nftId);
+        const result = await nftService.xumm.payload.get(payload.uuid);
+        if (!result) return;
+        
+        const txHash = result.response.txid;
+        if (!txHash) return;
 
-        if (error) console.error('Error updating NFT burn status:', error);
+        try {
+          const txInfo = await nftService.getTransactionDetails(txHash);
+          
+          if (txInfo?.validated) {
+            const { error: deleteError } = await supabase
+              .from('nfts')
+              .delete()
+              .eq('token_id', nftId);
+
+            if (deleteError) {
+              console.error('Error deleting burned NFT:', deleteError);
+            } else {
+              console.log(`NFT ${nftId} successfully deleted after burn`);
+            }
+          }
+        } catch (error) {
+          console.error('Error processing burn transaction:', error);
+        }
       }
     });
 

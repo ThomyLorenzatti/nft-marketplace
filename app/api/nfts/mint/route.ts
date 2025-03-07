@@ -27,14 +27,11 @@ export async function POST(request: Request) {
     const xrpAddress = formData.get('xrpAddress') as string;
     const file = formData.get('image') as File;
     
-    //  Upload NFT to IPFS and Supabase / renvoie les métadonnées et l'URL du fichier
-    const { metaDataURL } = await nftService.UploadNftToIpfs(
+    const { metaDataURL, id } = await nftService.UploadNftToIpfs(
       nftData,
       xrpAddress,
       file
     );    
-    console.log('Metadata URL', metaDataURL);
-    
     // Préparer la transaction de mint
     const preparedTx = await nftService.prepareMintTransaction(
       xrpAddress,
@@ -67,16 +64,16 @@ export async function POST(request: Request) {
         const nftokenID = typeof txInfo?.meta === 'object' ? (txInfo.meta as any).nftoken_id : undefined;
 
         if (nftokenID) {
-          // Update Supabase with the NFT ID
           const { error } = await supabase
             .from('nfts')
             .update({ 
               token_id: nftokenID,
               tx_hash: txHash,
-              minted: true
+              minted: true,
+              owner_address: xrpAddress
             })
-            .eq('metadata_url', nftService.ipfsService.getHttpUrl(metaDataURL));
-
+            .eq('id', id);
+        
           if (error) console.error('Error updating NFT in Supabase:', error);
         }
       }

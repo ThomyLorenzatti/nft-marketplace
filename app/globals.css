@@ -93,7 +93,7 @@
 }
 
 
-.can-effect {
+/* .can-effect {
   background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
   backdrop-filter: blur(4px);
@@ -123,4 +123,4 @@
   0% { transform: translateX(-100%); }
   50% { transform: translateX(100%); }
   100% { transform: translateX(-100%); }
-}
+} */

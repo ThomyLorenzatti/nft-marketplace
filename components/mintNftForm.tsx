@@ -7,7 +7,14 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
-import { ImagePlus, Upload } from "lucide-react"
+import { ImagePlus, Upload, Loader2 } from "lucide-react"
+import { toast } from "sonner"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 
 interface MintNFTFormProps {
   xrpAddress: string
@@ -28,6 +35,24 @@ export default function MintNFTForm({ xrpAddress }: { xrpAddress: string }) {
   const [image, setImage] = useState<File | null>(null);
   const [qrCode, setQrCode] = useState<string | null>(null);
   const [previewImage, setPreviewImage] = useState("")
+
+  const [isWaiting, setIsWaiting] = useState(false);
+  const [transactionUuid, setTransactionUuid] = useState<string | null>(null);
+  const [transactionStatus, setTransactionStatus] = useState<'pending' | 'signed' | 'cancelled' | 'expired' | null>(null);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    
+    if (isWaiting && transactionUuid) {
+      interval = setInterval(() => {
+        checkTransactionStatus(transactionUuid);
+      }, 3000);
+    }
+
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [isWaiting, transactionUuid]);
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,7 +61,7 @@ export default function MintNFTForm({ xrpAddress }: { xrpAddress: string }) {
     if (image) submitData.append('image', image);
     submitData.append('xrpAddress', xrpAddress);
     Object.entries(formData).forEach(([key, value]) => {
-      submitData.append(key, value);
+      submitData.append(key, value.toString());
     });
 
     try {
@@ -46,13 +71,22 @@ export default function MintNFTForm({ xrpAddress }: { xrpAddress: string }) {
       });
 
       const data = await response.json();
-      if (data.qrCodeUrl) {
+      
+      if (data.uuid && data.png) {
         setQrCode(data.png);
+        setTransactionUuid(data.uuid);
+        setIsWaiting(true);
+        setTransactionStatus('pending');
+        toast.info("Scannez le QR code pour créer votre NFT");
+      } else {
+        toast.error("Erreur lors de la création du NFT");
       }
     } catch (error) {
       console.error('Error minting NFT:', error);
+      toast.error("Erreur lors de la création du NFT");
     }
   };
+
   
   if (!xrpAddress) {
     return (
@@ -67,6 +101,31 @@ export default function MintNFTForm({ xrpAddress }: { xrpAddress: string }) {
     </div>
     )
   }
+
+  const checkTransactionStatus = async (uuid: string) => {
+    try {
+      const response = await fetch(`/api/nfts/status/${uuid}`);
+      const data = await response.json();
+      
+      if (data.signed) {
+        setTransactionStatus('signed');
+        setIsWaiting(false);
+        toast.success("NFT créé avec succès!");
+        router.push('/collection'); // Redirection vers la collection
+      } else if (data.cancelled || data.expired) {
+        setTransactionStatus(data.cancelled ? 'cancelled' : 'expired');
+        setIsWaiting(false);
+        toast.error(data.cancelled ? "Transaction annulée" : "Transaction expirée");
+        setQrCode(null);
+      }
+    } catch (error) {
+      console.error('Error checking transaction status:', error);
+    }
+  };
+
+
+
+  
   
   return (
     <>
@@ -216,11 +275,58 @@ export default function MintNFTForm({ xrpAddress }: { xrpAddress: string }) {
           <Upload className="mr-2 h-4 w-4" />
           Mettre en vente
         </Button>
-
         {qrCode && (
-          <div className="mt-4">
-            <img src={qrCode} alt="QR Code for signing" />
-          </div>
+          <Dialog open={!!qrCode} onOpenChange={() => {
+            if (transactionStatus !== 'pending') {
+              setQrCode(null);
+              setTransactionUuid(null);
+              setTransactionStatus(null);
+            }
+          }}>
+            <DialogContent className="sm:max-w-md glass-effect border-primary/30">
+              <DialogHeader>
+                <DialogTitle className="text-center text-xl font-semibold text-primary">
+                  Scanner le QR Code
+                </DialogTitle>
+              </DialogHeader>
+              <div className="flex flex-col items-center space-y-6 py-4">
+                <img 
+                  src={qrCode} 
+                  alt="QR Code for signing" 
+                  className="w-80 h-80 rounded-xl border border-primary/30"
+                />
+                <div className="text-center">
+                  <p className="text-muted-foreground">
+                    {transactionStatus === 'pending' ? (
+                      <span className="flex items-center justify-center gap-2">
+                        <Loader2 className="h-5 w-5 animate-spin"/>
+                        Transaction en attente de signature...
+                      </span>
+                    ) : transactionStatus === 'signed' ? (
+                      "Transaction signée avec succès!"
+                    ) : transactionStatus === 'cancelled' ? (
+                      "Transaction annulée"
+                    ) : transactionStatus === 'expired' ? (
+                      "Transaction expirée"
+                    ) : null}
+                  </p>
+                </div>
+                {(transactionStatus === 'cancelled' || transactionStatus === 'expired') && (
+                  <Button
+                    onClick={() => {
+                      setQrCode(null);
+                      setTransactionUuid(null);
+                      setTransactionStatus(null);
+                    }}
+                    variant="outline"
+                    className="w-full"
+                  >
+                    Réessayer
+                  </Button>
+                )}
+              </div>
+            </DialogContent>
+          </Dialog>
         )}
         </form>
       </div>
