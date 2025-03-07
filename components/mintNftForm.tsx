@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { MintNFTRequest } from '@/types/nft';
 import { useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button"
@@ -20,7 +20,10 @@ export default function MintNFTForm({ xrpAddress }: { xrpAddress: string }) {
     name: '',
     price: '',
     collection: '',
-    description: ''
+    description: '',
+    sparkling: false,
+    containerSize: '',
+    containerType: 'ml'
   });
   const [image, setImage] = useState<File | null>(null);
   const [qrCode, setQrCode] = useState<string | null>(null);
@@ -145,22 +148,84 @@ export default function MintNFTForm({ xrpAddress }: { xrpAddress: string }) {
           </div>
         </div>
 
+        <div className="space-y-4">
+          <div className="flex items-center space-x-2">
+            <input
+              type="checkbox"
+              id="sparkling"
+              checked={formData.sparkling}
+              onChange={(e) => setFormData({...formData, sparkling: e.target.checked})}
+              className="w-4 h-4 text-primary"
+            />
+            <Label htmlFor="sparkling" className="text-lg text-primary">Pétillant</Label>
+          </div>
 
-          <Button 
-            type="submit"
-            className="w-full bg-primary text-primary-foreground hover:bg-primary/80 neon-hover rounded-xl mt-6"
-            >
-            <Upload className="mr-2 h-4 w-4" />
-            Mettre en vente
-          </Button>
-
-          {qrCode && (
-            <div className="mt-4">
-              <img src={qrCode} alt="QR Code for signing" />
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="containerType" className="text-lg text-primary">Type de contenant</Label>
+              <select
+                id="containerType"
+                value={formData.containerType}
+                onChange={(e) => {
+                  const newType = e.target.value as 'ml' | 'l';
+                  setFormData({
+                    ...formData, 
+                    containerType: newType,
+                    containerSize: '' // Reset size when type changes
+                  })
+                }}
+                className="w-full p-2 rounded-lg glass-effect"
+              >
+                <option value="ml">Millilitres (ml)</option>
+                <option value="l">Litres (L)</option>
+              </select>
             </div>
-          )}
+
+            <div className="space-y-2">
+              <Label htmlFor="containerSize" className="text-lg text-primary">Contenance</Label>
+              <select
+                id="containerSize"
+                value={formData.containerSize}
+                onChange={(e) => setFormData({...formData, containerSize: e.target.value})}
+                className="w-full p-2 rounded-lg glass-effect"
+              >
+                <option value="">Sélectionner une taille</option>
+                {formData.containerType === 'ml' ? (
+                  <>
+                    <option value="250">250 ml</option>
+                    <option value="330">330 ml</option>
+                    <option value="355">355 ml</option>
+                    <option value="473">473 ml</option>
+                    <option value="500">500 ml</option>
+                  </>
+                ) : (
+                  <>
+                    <option value="1">1 L</option>
+                    <option value="2">2 L</option>
+                  </>
+                )}
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <Button 
+          type="submit"
+          className="w-full bg-primary text-primary-foreground hover:bg-primary/80 neon-hover rounded-xl mt-6"
+          >
+          <Upload className="mr-2 h-4 w-4" />
+          Mettre en vente
+        </Button>
+
+        {qrCode && (
+          <div className="mt-4">
+            <img src={qrCode} alt="QR Code for signing" />
+          </div>
+        )}
         </form>
       </div>
+
+      
     </>
   );
 }

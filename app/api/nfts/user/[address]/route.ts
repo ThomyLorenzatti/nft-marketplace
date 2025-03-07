@@ -7,8 +7,8 @@ export async function GET(
   request: Request,
   { params }: { params: { address: string } }
 ) {
-  // const client = new Client('wss://s.devnet.rippletest.net:51233')
-  const client = new Client('wss://xrplcluster.com');
+  const client = new Client('wss://s.altnet.rippletest.net:51233')
+  // const client = new Client('wss://xrplcluster.com');
 
 
   try {
@@ -26,7 +26,6 @@ export async function GET(
       xrplResponse.result.account_nfts.map(async (xrplNft) => {
         // Récupérer les métadonnées IPFS si URI existe
         const ipfsMetadata = xrplNft.URI ? await getIPFSData(xrplNft.URI) : null;
-        console.log('IPFS Metadata:', ipfsMetadata)
         return {
           id: xrplNft.NFTokenID,
           name: ipfsMetadata?.name || 'Unknown NFT',
@@ -34,8 +33,10 @@ export async function GET(
           price: ipfsMetadata?.price || '0',
           collection: ipfsMetadata?.collection || '',
           creator: ipfsMetadata?.creator || address,
+          owner: address,
           createdAt: ipfsMetadata?.createdAt || new Date().toISOString(),
           description: ipfsMetadata?.description || '',
+          sparkling: ipfsMetadata?.sparkling || false,
           attributes: ipfsMetadata?.attributes || [],
           xrplData: {
             flags: xrplNft.Flags,
@@ -53,7 +54,7 @@ export async function GET(
     }, { status: 200 })
 
   } catch (error) {
-    console.error('Error fetching NFTs:', error)
+    console.error('Error fetching NFTs:', )
     return NextResponse.json(
       { error: 'Error fetching NFTs' },
       { status: 500 }

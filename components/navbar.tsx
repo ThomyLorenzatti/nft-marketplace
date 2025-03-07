@@ -67,22 +67,13 @@ export function Navbar() {
                         Mint NFT
                         </Button>
                     </Link>
-                    <Link href="/sell">
-                      <Button 
-                        className="neon-hover bg-background/50 border-secondary/50 text-secondary hover:text-secondary-foreground rounded-xl"
-                        variant="outline"
-                      >
-                        <Plus className="mr-2 h-4 w-4" />
-                        Vendre NFT
-                      </Button>
-                    </Link>
                     <Link href="/collection">
                       <Button 
                         className="neon-hover bg-background/50 border-accent/50 text-accent hover:text-accent-foreground rounded-xl"
                         variant="outline"
                       >
                         <User className="mr-2 h-4 w-4" />
-                        Collection
+                        Mes Sodas 
                       </Button>
                     </Link>
                   </>

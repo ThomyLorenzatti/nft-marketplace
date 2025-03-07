@@ -20,4 +20,7 @@ export interface MintNFTRequest {
   price: string;
   collection: string;
   description: string;
+  sparkling: boolean;
+  containerSize: string;
+  containerType: 'ml' | 'l';
 }

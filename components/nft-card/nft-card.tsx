@@ -18,6 +18,7 @@ interface NFTCardProps {
   creator?: string
   createdAt?: string
   description?: string
+  sparkling?: boolean
   attributes?: Array<{ trait: string, value: string }>
   isInUserCollection?: boolean
   xrplData?: {
@@ -31,12 +32,13 @@ interface NFTCardProps {
 export function NFTCard({ 
   id, 
   name = 'NFT Sans Nom', 
-  image = '/placeholder-nft.png', // Assurez-vous d'avoir une image par défaut
+  image = '/nft-placeholder.svg', // Assurez-vous d'avoir une image par défaut
   price = '0', 
   collection = 'Collection Inconnue', 
   creator = 'Créateur Inconnu', 
   createdAt, 
   description = 'Aucune description disponible', 
+  sparkling = true,
   attributes = [],
   isInUserCollection = false,
   xrplData
