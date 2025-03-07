@@ -30,11 +30,9 @@ export class NFTService {
       // Upload image to IPFS
       const imageIpfsUrl = await this.ipfsService.uploadImage(imageFile);
       const httpImageUrl = this.ipfsService.getHttpUrl(imageIpfsUrl);
-      // console.log(request);
       const metadata = {
         name: request.name,
         image: imageIpfsUrl,
-        // image: httpImageUrl,
         display_url: httpImageUrl,
         price: request.price,
         collection: request.collection,
@@ -51,7 +49,6 @@ export class NFTService {
 
       // Upload metadata to IPFS
       const metaDataURL = await this.ipfsService.uploadMetadata(metadata);
-      // console.log('METADATA IPFS URL', metaDataURL);
 
       // Save to Supabase
       const { data, error } = await supabase.from('nfts').insert({
@@ -82,7 +79,6 @@ export class NFTService {
         NFTokenTaxon: 0,
         // TransferFee: 0, // Optionnel: pourcentage de royalties (0-50000 pour 0-50%)
       });
-      console.log('PREPARED TRANSACTION', prepared);
       return prepared;
     } catch (error) {
       console.error('Error preparing mint transaction:', error);
@@ -113,7 +109,6 @@ export class NFTService {
   async prepareBurnTransaction(address: string, tokenId: string) {
     try {
       await this.client.connect();
-      console.log(address)
       const prepared = await this.client.autofill({
         TransactionType: "NFTokenBurn",
         Account: address,
@@ -163,7 +158,6 @@ export class NFTService {
         Flags: 1, // Offre de vente
       });
 
-      console.log('PREPARED SEND TRANSACTION', prepared);
       return prepared;
     } catch (error) {
       console.error('Error preparing send transaction:', error);
@@ -192,4 +186,22 @@ export class NFTService {
     }
   }
 
+  async prepareCancelOffer(account: string, offerIndex: string) {
+    try {
+      await this.client.connect();
+      
+      const prepared = await this.client.autofill({
+        TransactionType: "NFTokenCancelOffer",
+        Account: account,
+        NFTokenOffers: [offerIndex]
+      });
+  
+      return prepared;
+    } catch (error) {
+      console.error('Error preparing cancel offer:', error);
+      throw error;
+    } finally {
+      await this.client.disconnect();
+    }
+  }
 } 

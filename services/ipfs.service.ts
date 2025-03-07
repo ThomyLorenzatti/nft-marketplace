@@ -55,7 +55,6 @@ export class IPFSService {
   // Utilitaire pour obtenir l'URL HTTP pour l'affichage
   getHttpUrl(ipfsUrl: string): string {
     const hash = ipfsUrl.replace('ipfs://', '');
-    console.log(`https://gateway.pinata.cloud/ipfs/${hash}`);
     return `https://gateway.pinata.cloud/ipfs/${hash}`;
   }
 }

@@ -30,25 +30,29 @@ export async function GET(
       console.error('Error fetching user data:', userError);
     }
 
-    // 2. Transformer les transactions Supabase en format unifié
+    // Dans la fonction GET, modifier la partie qui transforme les transactions
+    const { data: nftsData } = await supabase
+      .from('nfts')
+      .select('token_id, image_url, name')
+      .in('token_id', nftList.map((nft: any) => nft.NFTokenID));
+
+    const nftDetailsMap = new Map(
+      nftsData?.map(nft => [nft.token_id, { image: nft.image_url, name: nft.name }]) || []
+    );
+
     const pendingTransactions = userData?.pendingtransactions?.map((tx: any) => ({
       id: tx.transactionId,
       type: tx.type,
       status: tx.status,
-      timestamp: tx.createdAt,
       nftId: tx.nftId,
       from: tx.from,
       to: tx.to,
       amount: tx.amount,
-      flags: tx.metadata?.flags || 0,
-      metadata: {
-        offerType: tx.metadata?.offerType || 'buy',
-        expiration: tx.metadata?.expiration || null,
-        destination: tx.metadata?.destination || null
-      }
+      createdAt: tx.createdAt,
+      nftDetails: nftDetailsMap.get(tx.nftId) || undefined
     })) || [];
 
-    // 3. Récupérer uniquement les offres de vente depuis XRPL
+    // Pour les offres de vente
     const sellOffersPromises = nftList.map(async (nft: any) => {
       const sellOffers = await client.request({ 
         command: "nft_sell_offers", 
@@ -59,17 +63,12 @@ export async function GET(
         id: offer.nft_offer_index,
         type: "sell",
         status: "pending",
-        timestamp: new Date().toISOString(),
         nftId: nft.NFTokenID,
         from: offer.owner,
         to: offer.destination || params.account,
         amount: offer.amount,
-        flags: offer.flags,
-        metadata: {
-          offerType: "sell",
-          expiration: offer.expiration || null,
-          destination: offer.destination || null
-        }
+        createdAt: new Date().toISOString(),
+        nftDetails: nftDetailsMap.get(nft.NFTokenID)
       })) || [];
     });
 

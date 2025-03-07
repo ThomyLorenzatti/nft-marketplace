@@ -191,7 +191,6 @@ export function NFTCard({
     
     setIsLoadingXrplInfo(true);
     try {
-      console.log("LSJKMLKJGDLMQKFJGMLSKDJGLMKMSJGOÏTEJHQEÖPTIHNE¨QOITHNÖPIEQTNH")
       const response = await fetch(`/api/nfts/${id}`);
       const data = await response.json();
       

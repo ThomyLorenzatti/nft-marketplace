@@ -60,7 +60,6 @@ export async function POST(request: Request) {
 
         // Get transaction details from XRPL
         const txInfo = await nftService.getTransactionDetails(txHash);
-        console.log('Transaction Info:', txInfo);
         const nftokenID = typeof txInfo?.meta === 'object' ? (txInfo.meta as any).nftoken_id : undefined;
 
         if (nftokenID) {

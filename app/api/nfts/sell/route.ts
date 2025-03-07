@@ -61,7 +61,6 @@ export async function POST(request: Request) {
               last_transaction_hash: txHash
             })
             .eq('token_id', nftId);
-          console.log('NFT updated:', nftError, nftId);
           if (nftError) throw nftError;
 
           // Récupérer les NFTs en vente actuels de l'utilisateur
@@ -100,7 +99,6 @@ export async function POST(request: Request) {
           console.error('Error updating after transaction signed:', error);
         }
       }
-      console.log('Transaction pas signed');
     });
 
     // Retourner le QR code pour la signature

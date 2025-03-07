@@ -12,7 +12,7 @@ import { useState } from "react"
 
 interface PendingTransaction {
   id: string
-  type: 'buy' | 'send' | 'receive'
+  type: 'buy' | 'send' | 'receive' | 'sell' // Ajout du type 'sell'
   status: 'pending'
   nftId: string
   from: string
@@ -20,15 +20,20 @@ interface PendingTransaction {
   amount: string
   createdAt: string
   qrCode?: string // QR code URL après acceptation/refus
+  nftDetails?: {
+    image: string
+    name: string
+  }
 }
 
 interface PendingTransactionsProps {
   transactions: PendingTransaction[]
   onAccept?: (txId: string) => Promise<{ qrCodeUrl: string } | void>
   onReject?: (txId: string) => Promise<{ qrCodeUrl: string } | void>
+  onCancelSell?: (txId: string) => Promise<{ qrCodeUrl: string } | void> // Ajout du type
 }
 
-export function PendingTransactions({ transactions, onAccept, onReject }: PendingTransactionsProps) {
+export function PendingTransactions({ transactions, onAccept, onReject, onCancelSell }: PendingTransactionsProps) {
   const [selectedTx, setSelectedTx] = useState<PendingTransaction | null>(null)
   const [showQRCode, setShowQRCode] = useState(false)
   const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null)
@@ -58,6 +63,18 @@ export function PendingTransactions({ transactions, onAccept, onReject }: Pendin
     }
   }
 
+  // Ajouter la fonction handleCancelSell
+  const handleCancelSell = async (tx: PendingTransaction) => {
+    try {
+      const response = await onCancelSell?.(tx.id)
+      if (response && 'qrCodeUrl' in response) {
+        setQrCodeUrl(response.qrCodeUrl)
+        setShowQRCode(true)
+      }
+    } catch (error) {
+      console.error('Error cancelling sell offer:', error)
+    }
+  }
 
   const getTransactionIcon = (type: string) => {
     switch (type) {
@@ -73,6 +90,7 @@ export function PendingTransactions({ transactions, onAccept, onReject }: Pendin
       case 'buy': return "Offre d'achat envoyée"
       case 'send': return "Envoi en attente"
       case 'receive': return "Réception en attente"
+      case 'sell': return "Offre de vente en cours"
       default: return "Transaction en attente"
     }
   }
@@ -122,32 +140,42 @@ export function PendingTransactions({ transactions, onAccept, onReject }: Pendin
             </DialogTitle>
           </DialogHeader>
           
-            {/* <div className="space-y-4"> */}
             <div className="glass-effect p-4 rounded-lg border border-primary/30 space-y-3">
-              <div className="text-sm">
-              <p className="text-muted-foreground">NFT ID</p>
-              <p className="font-medium break-all">{selectedTx.nftId}</p>
-              </div>
+              {selectedTx.nftDetails?.image && (
+                <div className="relative aspect-square w-full rounded-lg overflow-hidden mb-4">
+                  <img
+                    src={selectedTx.nftDetails.image}
+                    alt={selectedTx.nftDetails.name || 'NFT Image'}
+                    className="object-cover w-full h-full"
+                  />
+                </div>
+              )}
 
-              {selectedTx.type === 'buy' ? (
               <div className="text-sm">
-                <p className="text-muted-foreground">Prix proposé</p>
-                <p className="font-medium text-primary">
-                {Number(selectedTx.amount) / 1000000} XRP
+                <p className="text-muted-foreground">NFT</p>
+                <p className="font-medium">
+                  {selectedTx.nftDetails?.name || `#${selectedTx.nftId.slice(-4)}`}
                 </p>
               </div>
-              ) : (
-              <>
+
+              {(selectedTx.type === 'buy' || selectedTx.type === 'receive') && (
                 <div className="text-sm">
+                  <p className="text-muted-foreground">Prix proposé</p>
+                  <p className="font-medium text-primary">
+                    {Number(selectedTx.amount) / 1000000} XRP
+                  </p>
+                </div>
+              )}
+
+              <div className="text-sm">
                 <p className="text-muted-foreground">De</p>
                 <p className="font-medium break-all">{selectedTx.from}</p>
-                </div>
-                <div className="text-sm">
+              </div>
+
+              <div className="text-sm">
                 <p className="text-muted-foreground">À</p>
                 <p className="font-medium break-all">{selectedTx.to}</p>
-                </div>
-              </>
-              )}
+              </div>
             </div>
 
             {showQRCode ? (
@@ -211,6 +239,15 @@ export function PendingTransactions({ transactions, onAccept, onReject }: Pendin
                       className="text-destructive hover:text-destructive hover:border-destructive"
                     >
                       Annuler
+                    </Button>
+                  )}
+                  {selectedTx.type === 'sell' && onCancelSell && ( // Ajout du bouton d'annulation de vente
+                    <Button
+                      variant="outline"
+                      onClick={() => handleCancelSell(selectedTx)}
+                      className="text-destructive hover:text-destructive hover:border-destructive"
+                    >
+                      Annuler la vente
                     </Button>
                   )}
                 </div>
