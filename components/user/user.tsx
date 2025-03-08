@@ -101,7 +101,7 @@ export function Profil({ id }: ProfilProps) {
                 ))}
             </div>
             <div className="mt-5 flex justify-center">
-                <Button className="px-8 py-8 text-lg" onClick={() => window.open(`https://xrpscan.com/account/${id}`, "_blank")}>Voir l'explorateur de blocs</Button>
+                <Button className="px-8 py-8 text-lg" onClick={() => window.open(`https://xrpscan.com/account/${id}`, "_blank")}>Voir l&apos;explorateur de blocs</Button>
             </div>
         </div>
     );

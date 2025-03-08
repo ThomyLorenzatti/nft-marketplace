@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import Image from "next/image"
 import { Card, CardContent } from "@/components/ui/card"
+import CarrouselSlideDeck from "@/components/carroussel-slide-deck"
 
 // Interface pour les éléments de documentation
 interface DocItem {
@@ -91,6 +92,8 @@ export default function Documentation() {
     <main className="min-h-screen">
       <div className="container mx-auto px-4 pt-32 pb-16">
         <div className="flex flex-col items-center space-y-12">
+          <CarrouselSlideDeck />
+          
           <div className="text-center space-y-4">
             <h1 className="text-5xl font-bold neon-text bg-clip-text text-transparent bg-gradient-to-r from-primary via-secondary to-accent">
               Documentation
