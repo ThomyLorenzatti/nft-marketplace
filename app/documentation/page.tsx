@@ -113,7 +113,7 @@ export default function Documentation() {
             <div className="w-full max-w-4xl space-y-24">
               {documentationItems.map((item, index) => (
                 <div key={item.id} className="scroll-m-20" id={`section-${item.id}`}>
-                  <Card className={`glass-effect overflow-hidden border-primary/30 ${index % 2 === 0 ? 'md:-translate-x-6' : 'md:translate-x-6'}`}>
+                  <Card className={`glass-effect overflow-hidden border-primary/30 ${index % 2 === 0 ? 'md:-translate-x-32' : 'md:translate-x-32'}`}>
                     <CardContent className="p-6">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
                         {index % 2 === 0 ? (
