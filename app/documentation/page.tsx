@@ -110,10 +110,10 @@ export default function Documentation() {
               ))}
             </div>
           ) : (
-            <div className="w-full max-w-4xl space-y-16">
+            <div className="w-full max-w-4xl space-y-24">
               {documentationItems.map((item, index) => (
                 <div key={item.id} className="scroll-m-20" id={`section-${item.id}`}>
-                  <Card className="glass-effect overflow-hidden border-primary/30">
+                  <Card className={`glass-effect overflow-hidden border-primary/30 ${index % 2 === 0 ? 'md:-translate-x-6' : 'md:translate-x-6'}`}>
                     <CardContent className="p-6">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
                         {index % 2 === 0 ? (
@@ -127,7 +127,7 @@ export default function Documentation() {
                                 alt={item.title}
                                 width={500}
                                 height={500}
-                                className="w-full h-auto object-cover"
+                                className="w-full h-auto object-cover rounded-lg shadow-lg"
                                 onError={(e) => {
                                   const target = e.target as HTMLImageElement;
                                   target.src = '/doc-placeholder.svg';
@@ -162,7 +162,7 @@ export default function Documentation() {
                                 alt={item.title}
                                 width={500}
                                 height={500}
-                                className="w-full h-auto object-cover"
+                                className="w-full h-auto object-cover rounded-lg shadow-lg"
                                 onError={(e) => {
                                   const target = e.target as HTMLImageElement;
                                   target.src = '/doc-placeholder.svg';

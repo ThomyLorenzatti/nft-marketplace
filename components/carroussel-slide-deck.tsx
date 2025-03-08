@@ -11,6 +11,7 @@ const techLogos = {
   nextjs: "/logos/next.png",
   tailwind: "/logos/tailwind.png",
   supabase: "/logos/supabase.webp",
+  xaman: "/logos/xaman.jpg",
 }
 
 interface Slide {
@@ -57,7 +58,7 @@ export default function CarrouselSlideDeck() {
                   src={techLogos.react}
                   alt="React"
                   fill
-                  className="object-contain"
+                  className="object-contain rounded-lg"
                 />
               </div>
               <p className="text-lg font-medium">React</p>
@@ -68,7 +69,7 @@ export default function CarrouselSlideDeck() {
                   src={techLogos.nextjs}
                   alt="Next.js"
                   fill
-                  className="object-contain dark:invert"
+                  className="object-contain dark:invert rounded-lg"
                 />
               </div>
               <p className="text-lg font-medium">Next.js</p>
@@ -79,7 +80,7 @@ export default function CarrouselSlideDeck() {
                   src={techLogos.tailwind}
                   alt="Tailwind CSS"
                   fill
-                  className="object-contain"
+                  className="object-contain rounded-lg"
                 />
               </div>
               <p className="text-lg font-medium">Tailwind CSS</p>
@@ -90,7 +91,7 @@ export default function CarrouselSlideDeck() {
                   src={techLogos.supabase}
                   alt="Supabase"
                   fill
-                  className="object-contain"
+                  className="object-contain rounded-lg"
                 />
               </div>
               <p className="text-lg font-medium">Supabase</p>
@@ -112,8 +113,90 @@ export default function CarrouselSlideDeck() {
                 alt="Supabase"
                 width={100}
                 height={100}
-                className="object-contain"
+                className="object-contain rounded-lg"
               />
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: 4,
+      content: (
+        <div className="flex flex-col items-center justify-center h-full text-center px-8">
+          <h2 className="text-3xl md:text-4xl font-bold neon-text bg-clip-text text-transparent bg-gradient-to-r from-primary via-secondary to-accent mb-8">
+            Compatibilité Wallet
+          </h2>
+          <div className="flex flex-col items-center space-y-6">
+            <div className="w-32 h-32 relative">
+              <Image
+                src={techLogos.xaman}
+                alt="Xaman Wallet"
+                fill
+                className="object-contain rounded-lg"
+              />
+            </div>
+            <div className="max-w-md">
+              <p className="text-xl font-medium mb-3">Wallet Xaman uniquement</p>
+              <p className="text-muted-foreground">
+                Notre plateforme prend en charge exclusivement le wallet Xaman sur XRP Ledger pour le moment.
+              </p>
+            </div>
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: 5,
+      content: (
+        <div className="flex flex-col items-center justify-center h-full text-center px-8">
+          <h2 className="text-3xl md:text-4xl font-bold neon-text bg-clip-text text-transparent bg-gradient-to-r from-primary via-secondary to-accent mb-8">
+            Fonctionnalités Principales
+          </h2>
+          <div className="grid grid-cols-2 gap-8 mt-6">
+            <div className="flex flex-col items-center p-4 rounded-lg border border-primary/20 bg-primary/5 backdrop-blur-sm">
+              <h3 className="text-xl font-semibold mb-2 text-gradient">Mint de NFT</h3>
+              <p className="text-muted-foreground text-sm">Créez vos propres NFTs personnalisés</p>
+            </div>
+            <div className="flex flex-col items-center p-4 rounded-lg border border-primary/20 bg-primary/5 backdrop-blur-sm">
+              <h3 className="text-xl font-semibold mb-2 text-gradient">Envoi</h3>
+              <p className="text-muted-foreground text-sm">Transférez vos NFTs à d'autres utilisateurs</p>
+            </div>
+            <div className="flex flex-col items-center p-4 rounded-lg border border-primary/20 bg-primary/5 backdrop-blur-sm">
+              <h3 className="text-xl font-semibold mb-2 text-gradient">Mise en vente</h3>
+              <p className="text-muted-foreground text-sm">Proposez vos NFTs sur la marketplace</p>
+            </div>
+            <div className="flex flex-col items-center p-4 rounded-lg border border-primary/20 bg-primary/5 backdrop-blur-sm">
+              <h3 className="text-xl font-semibold mb-2 text-gradient">Achat</h3>
+              <p className="text-muted-foreground text-sm">Acquérez des NFTs depuis la marketplace</p>
+            </div>
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: 6,
+      content: (
+        <div className="flex flex-col items-center justify-center h-full text-center px-16">
+          <h2 className="text-3xl md:text-4xl font-bold neon-text bg-clip-text text-transparent bg-gradient-to-r from-primary via-secondary to-accent mb-8">
+            Design Futuriste & Ergonomique
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+            <div className="p-4 rounded-lg border-l-4 border-primary bg-primary/5 backdrop-blur-sm">
+              <h3 className="text-xl font-semibold mb-2 text-gradient">Interface Intuitive</h3>
+              <p className="text-muted-foreground text-sm">Navigation simplifiée avec des menus clairs et des actions évidentes</p>
+            </div>
+            <div className="p-4 rounded-lg border-l-4 border-secondary bg-secondary/5 backdrop-blur-sm">
+              <h3 className="text-xl font-semibold mb-2 text-gradient">Esthétique Néon</h3>
+              <p className="text-muted-foreground text-sm">Design moderne au style futuriste qui immerse l'utilisateur dans l'univers NFT</p>
+            </div>
+            <div className="p-4 rounded-lg border-l-4 border-accent bg-accent/5 backdrop-blur-sm">
+              <h3 className="text-xl font-semibold mb-2 text-gradient">Responsive Design</h3>
+              <p className="text-muted-foreground text-sm">Expérience utilisateur optimisée sur tous les appareils, du mobile au desktop</p>
+            </div>
+            <div className="p-4 rounded-lg border-l-4 border-primary/70 bg-primary/5 backdrop-blur-sm">
+              <h3 className="text-xl font-semibold mb-2 text-gradient">Feedbacks Visuels</h3>
+              <p className="text-muted-foreground text-sm">Retours d'information clairs pour chaque action permettant une prise en main immédiate</p>
+            </div>
           </div>
         </div>
       ),
@@ -129,7 +212,7 @@ export default function CarrouselSlideDeck() {
   }
 
   return (
-    <div className="relative w-full max-w-4xl mx-auto h-[500px] mb-16">
+    <div className="relative w-full max-w-5xl mx-auto h-[600px] mb-16">
       <div className="glass-effect rounded-2xl border border-primary/30 w-full h-full overflow-hidden">
         <div 
           className="flex h-full transition-transform duration-500 ease-in-out" 
