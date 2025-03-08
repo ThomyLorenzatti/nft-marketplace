@@ -56,6 +56,14 @@ export function Navbar() {
               </Link>
               
               <div className="flex items-center gap-4">
+                <Link href="/documentation">
+                  <Button 
+                    className="neon-hover bg-background/50 border-primary/50 text-primary hover:text-primary-foreground rounded-xl"
+                    variant="outline"
+                  >
+                    Documentation
+                  </Button>
+                </Link>
                 {isConnected && (
                   <>
                     <Link href="/mint">
