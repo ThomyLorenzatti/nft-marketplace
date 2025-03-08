@@ -109,7 +109,14 @@ export default function CarrouselSlideDeck() {
           </h2>
           <div className="flex flex-col items-center">
               <Image
-                src="/logos/supabase.webp"
+                src="/images/table1.png"
+                alt="Supabase"
+                width={100}
+                height={100}
+                className="object-contain rounded-lg"
+              />
+              <Image
+                src="/images/table2.png"
                 alt="Supabase"
                 width={100}
                 height={100}
