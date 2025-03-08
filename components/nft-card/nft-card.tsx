@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 "use client"
 
 import Image from "next/image"
@@ -65,14 +66,9 @@ export function NFTCardBuy({
   
           if (authData.account) {
             setXrpAddress(authData.account)
-            return authData.account
-          } else {
-            window.location.href = '/'
-            return null
           }
         } catch (error) {
           console.error('Error during auth:', error)
-          return null
         }
       }
       checkAuth()
@@ -84,6 +80,7 @@ export function NFTCardBuy({
     try {
       if (!xrpAddress) {
         toast.error("Vous devez être connecté pour acheter")
+        setBuying(false)
         return
       }
 
@@ -312,7 +309,7 @@ export function NFTCardBuy({
                       <Zap className="mr-2 h-4 w-4" />
                       {buying ? "Préparation de l'achat..." : 
                       owner === xrpAddress ? "Vous êtes le propriétaire" : 
-                      "Acheter maintenant"}
+                      xrpAddress ? "Acheter maintenant" : "Connectez-vous pour acheter"}
                     </Button>
                   </>
                 )}
