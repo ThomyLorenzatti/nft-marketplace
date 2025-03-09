@@ -197,8 +197,8 @@ export default function CarrouselSlideDeck() {
               <p className="text-muted-foreground text-sm">Design moderne au style futuriste qui immerse l'utilisateur dans l'univers NFT</p>
             </div>
             <div className="p-4 rounded-lg border-l-4 border-accent bg-accent/5 backdrop-blur-sm">
-              <h3 className="text-xl font-semibold mb-2 text-gradient">Responsive Design</h3>
-              <p className="text-muted-foreground text-sm">Expérience utilisateur optimisée sur tous les appareils, du mobile au desktop</p>
+              <h3 className="text-xl font-semibold mb-2 text-gradient">Identité Visuelle</h3>
+              <p className="text-muted-foreground text-sm">On a choisi une identité visuelle avec des néons et futuriste</p>
             </div>
             <div className="p-4 rounded-lg border-l-4 border-primary/70 bg-primary/5 backdrop-blur-sm">
               <h3 className="text-xl font-semibold mb-2 text-gradient">Feedbacks Visuels</h3>
