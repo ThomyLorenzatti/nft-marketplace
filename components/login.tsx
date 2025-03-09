@@ -44,10 +44,8 @@ export function Login({ onConnected }: LoginProps) {
           setQrCodeUrl(null);
           setIsWalletModalOpen(false);
           
-          // Set XRP address in cookies
           document.cookie = `xrp_address=${data.account}; path=/; max-age=86400`;
           
-          // Notify parent component
           onConnected(data.account);
         }
       } catch (error) {
@@ -67,7 +65,6 @@ export function Login({ onConnected }: LoginProps) {
         Connecter Wallet
       </Button>
 
-      {/* Modal de sélection du wallet */}
       {isWalletModalOpen && !qrCodeUrl && createPortal(
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[100]">
           <div className="bg-background p-6 rounded-2xl shadow-lg w-96 text-center relative translate-y-0">
@@ -92,7 +89,6 @@ export function Login({ onConnected }: LoginProps) {
 
       )}
 
-      {/* QR Code de connexion */}
       {qrCodeUrl && createPortal(
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
           <div className="bg-background p-6 rounded-2xl shadow-lg w-96 text-center relative top-auto">

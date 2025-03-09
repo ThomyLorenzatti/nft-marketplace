@@ -16,7 +16,6 @@ export class NFTService {
       process.env.XUMM_API_SECRET!
     );
     this.client = new Client('wss://s.altnet.rippletest.net:51233'); 
-    // this.client = new Client('wss://xrplcluster.com');
     
     this.ipfsService = new IPFSService();
   }
@@ -27,7 +26,6 @@ export class NFTService {
     imageFile: File
   ) {
     try {
-      // Upload image to IPFS
       const imageIpfsUrl = await this.ipfsService.uploadImage(imageFile);
       const httpImageUrl = this.ipfsService.getHttpUrl(imageIpfsUrl);
       const metadata = {
@@ -47,14 +45,12 @@ export class NFTService {
         ]
       };
 
-      // Upload metadata to IPFS
       const metaDataURL = await this.ipfsService.uploadMetadata(metadata);
 
-      // Save to Supabase
       const { data, error } = await supabase.from('nfts').insert({
         ...metadata,
         token_id: 1,
-        xrp_address: xrpAddress, // address of the creator
+        xrp_address: xrpAddress,
         metadata_url: this.ipfsService.getHttpUrl(metaDataURL)
       }).select().single();
 
@@ -77,7 +73,6 @@ export class NFTService {
         URI: uriHex,
         Flags:  1 | 8,
         NFTokenTaxon: 0,
-        // TransferFee: 0, // Optionnel: pourcentage de royalties (0-50000 pour 0-50%)
       });
       return prepared;
     } catch (error) {
@@ -133,7 +128,7 @@ export class NFTService {
         Account: address,
         NFTokenID: nftId,
         Amount: xrpToDrops(price),
-        Flags: 1, // tfSellToken
+        Flags: 1,
       });
   
       return prepared;
@@ -154,8 +149,8 @@ export class NFTService {
         Account: senderAddress,
         NFTokenID: tokenId,
         Destination: recipientAddress,
-        Amount: xrpToDrops(price), // Transfer gratuit
-        Flags: 1, // Offre de vente
+        Amount: xrpToDrops(price),
+        Flags: 1,
       });
 
       return prepared;

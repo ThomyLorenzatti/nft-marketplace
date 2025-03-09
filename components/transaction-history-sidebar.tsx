@@ -77,7 +77,6 @@ export function TransactionHistorySidebar({ account }: TransactionHistorySidebar
 
   return (
     <>
-      {/* Bouton pour ouvrir/fermer la sidebar */}
       <Button
         variant="ghost"
         size="icon"
@@ -97,7 +96,6 @@ export function TransactionHistorySidebar({ account }: TransactionHistorySidebar
         )}
       </Button>
 
-      {/* Sidebar */}
       <div
         className={cn(
           "fixed right-0 top-0 h-screen w-80 bg-background/95 backdrop-blur-sm border-l border-primary/30 pt-32 px-4 transition-transform duration-300 ease-in-out",
